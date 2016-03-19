@@ -5,10 +5,10 @@ The image can be pulled from the [Docker Hub Registry](https://registry.hub.dock
 
 This both the OMNI Naming Service and OMNI Event services are started by default and managed via supervisor. 
 ```sh
-docker run --detach --name=redhawk-1.10 --restart=always redhawkci/redhawk:1.10-el6
+docker run --detach --name=redhawk-2.0 --restart=always redhawkci/redhawk:2.0-el6
 ```
 
 To connect to the running container:
 ```sh
-docker exec -it redhawk-1.10 bash
+docker exec -it redhawk-2.0 bash
 ```

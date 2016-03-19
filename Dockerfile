@@ -5,16 +5,7 @@ COPY redhawk.repo /etc/yum.repos.d/
 
 RUN yum update -y && \
     yum install -y epel-release && \
-    yum install -y redhawk-devel \
-                   redhawk-sdrroot-dev-mgr \
-                   redhawk-sdrroot-dom-mgr \
-                   redhawk-sdrroot-dom-profile \
-                   redhawk-codegen \
-                   redhawk-basic-components \
-                   bulkioInterfaces \
-                   burstioInterfaces \
-                   frontendInterfaces \
-                   GPP \
+    yum install -y @redhawk-runtime \
                    omniEvents-server \
                    omniORB-servers \
                    omniORB-utils \
