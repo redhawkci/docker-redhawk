@@ -6,6 +6,7 @@ COPY redhawk.repo /etc/yum.repos.d/
 RUN yum update -y && \
     yum install -y epel-release && \
     yum install -y @redhawk-runtime \
+                   redhawk-devel \
                    omniEvents-server \
                    omniORB-servers \
                    omniORB-utils \
