@@ -15,40 +15,23 @@ RUN yum update -y && \
                    burstioInterfaces \
                    frontendInterfaces \
                    GPP \
+                   omniEvents-server \
                    omniORB-servers \
-                   omniEvents-bootscripts \
-                   sudo && \
-    yum clean all
+                   omniORB-utils \
+                   supervisor && \
+    yum clean all && \
+    mkdir -p /var/log/omniEvents && \
+    chown omniORB /var/log/omniEvents
 
-COPY omniORB.cfg /etc/
+#Add config files
+COPY *.c* /etc/
 
-#configure default user
-RUN mkdir -p /home/redhawk
-RUN cp /etc/skel/.bash* /home/redhawk && chown -R redhawk. /home/redhawk
-RUN usermod -a -G wheel --shell /bin/bash redhawk
-RUN echo "%wheel        ALL=(ALL)       NOPASSWD: ALL" >> /etc/sudoers
+#Default environment
+ENV OSSIEHOME=/usr/local/redhawk/core \
+    SDRROOT=/var/redhawk/sdr \
+    PYTHONPATH=/usr/local/redhawk/core/lib64/python:/usr/local/redhawk/core/lib/python \
+    PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/redhawk/core/bin \
+    LD_LIBRARY_PATH=/usr/local/redhawk/core/lib64:/usr/local/redhawk/core/lib
 
-#Define environment
-ENV HOME /home/redhawk
-ENV OSSIEHOME /usr/local/redhawk/core
-ENV SDRROOT /var/redhawk/sdr
-ENV PYTHONPATH /usr/local/redhawk/core/lib64/python:/usr/local/redhawk/core/lib/python
-ENV PATH /usr/local/redhawk/core/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-WORKDIR /home/redhawk
-USER redhawk
-
-#Run nodeconfig
-RUN /var/redhawk/sdr/dev/devices/GPP/python/nodeconfig.py --silent \
-    --clean \
-    --gpppath=/devices/GPP \
-    --disableevents \
-    --domainname=REDHAWK_DEV \
-    --sdrroot=/var/redhawk/sdr \
-    --inplace \
-    --nodename DevMgr_default
-
-ONBUILD USER root
-
-EXPOSE 2809
-EXPOSE 11169
-CMD ["/bin/bash", "-l"]
+EXPOSE 2809 11169
+CMD ["/usr/bin/supervisord", "-n"]
