@@ -21,7 +21,7 @@ RUN yum update -y && \
 RUN sed -i 's/enabled=0/enabled=1/' /etc/yum.repos.d/redhawk-2.0.repo && \
     sed -i 's/enabled=1/enabled=0/' /etc/yum.repos.d/redhawk-1.10.repo
 
-RUN yum update -y GPP-*
+RUN yum install -y GPP-*
 
 #Add config files
 COPY *.c* /etc/
