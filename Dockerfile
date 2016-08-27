@@ -1,12 +1,15 @@
 FROM centos:6
 MAINTAINER Ryan Bauman <ryanbauman@gmail.com>
 
-COPY redhawk.repo /etc/yum.repos.d/
+COPY *.repo /etc/yum.repos.d/
 
 RUN yum update -y && \
     yum install -y epel-release && \
-    yum install -y @redhawk-runtime \
-                   redhawk-devel \
+    yum install -y redhawk* \
+                   GPP* \
+                   bulkio* \
+                   burstio* \
+                   frontend* \
                    omniEvents-server \
                    omniORB-servers \
                    omniORB-utils \
@@ -14,6 +17,11 @@ RUN yum update -y && \
     yum clean all && \
     mkdir -p /var/log/omniEvents && \
     chown omniORB /var/log/omniEvents
+
+RUN sed -i 's/enabled=0/enabled=1/' /etc/yum.repos.d/redhawk-2.0.repo && \
+    sed -i 's/enabled=1/enabled=0/' /etc/yum.repos.d/redhawk-1.10.repo
+
+RUN yum update -y GPP-*
 
 #Add config files
 COPY *.c* /etc/
